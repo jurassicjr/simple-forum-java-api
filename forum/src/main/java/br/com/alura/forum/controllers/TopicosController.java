@@ -7,6 +7,8 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -42,6 +44,7 @@ public class TopicosController {
 	private CursoRepository cursoRepository;
 
 	@GetMapping
+	@Cacheable(value = "topicList")
 	public Page<TopicoDTO> lista(@RequestParam(required = false) String nomeCurso, @PageableDefault(sort = "id", direction = Direction.DESC) Pageable paginacao) {
 
 		/*
@@ -67,6 +70,7 @@ public class TopicosController {
 
 	@Transactional
 	@PostMapping
+	@CacheEvict(value = "topicList", allEntries = true)
 	public ResponseEntity<TopicoDTO> cadastrar(@RequestBody @Valid TopicoForm form, UriComponentsBuilder uriBuilder) {
 		Topico topico = form.converter(cursoRepository);
 		topicoRepository.save(topico);
@@ -87,6 +91,7 @@ public class TopicosController {
 
 	@PutMapping("/{id}")
 	@Transactional
+	@CacheEvict(value = "topicList", allEntries = true)
 	public ResponseEntity<TopicoDTO> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizacaoTopicoForm form) {
 		Optional<Topico> topico = topicoRepository.findById(id);
 
@@ -102,6 +107,7 @@ public class TopicosController {
 
 	@DeleteMapping("/{id}")
 	@Transactional
+	@CacheEvict(value = "topicList", allEntries = true)
 	public ResponseEntity<?> remover(@PathVariable Long id) {
 
 		Optional<Topico> topico = topicoRepository.findById(id);
