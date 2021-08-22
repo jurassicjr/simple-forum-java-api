@@ -8,8 +8,9 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,11 +42,20 @@ public class TopicosController {
 	private CursoRepository cursoRepository;
 
 	@GetMapping
-	public Page<TopicoDTO> lista(@RequestParam(required = false) String nomeCurso, @RequestParam int pagina, @RequestParam int quantidadeDeElementos) {
-		
-		Pageable paginacao = PageRequest.of(pagina, quantidadeDeElementos);
-		
-		
+	public Page<TopicoDTO> lista(@RequestParam(required = false) String nomeCurso, @PageableDefault(sort = "id", direction = Direction.DESC) Pageable paginacao) {
+
+		/*
+		 * Pageable paginacao = PageRequest.of(pagina,
+		 * quantidadeDeElementos,Direction.ASC, ordenacao); Pode ser feito dessa forma
+		 * manualmente ou de forma automatizada recebendo um pageable no método, porém
+		 * precisa habilitar um módulo no spring boot na classe main
+		 * (@EnableSpringDataWebSupport).
+		 * 
+		 * Métodos antingos @RequestParam int pagina,
+		 * 
+		 * @RequestParam int quantidadeDeElementos, @RequestParam String ordenacao
+		 */
+
 		if (nomeCurso == null) {
 			Page<Topico> topicos = topicoRepository.findAll(paginacao);
 			return TopicoDTO.converter(topicos);
