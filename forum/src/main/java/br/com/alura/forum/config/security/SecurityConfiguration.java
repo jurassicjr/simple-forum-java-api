@@ -49,6 +49,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.antMatchers(HttpMethod.GET, "/topicos").permitAll()
 		.antMatchers(HttpMethod.GET, "/topicos/*").permitAll()
 		.antMatchers(HttpMethod.POST, "/auth").permitAll()
+		.antMatchers(HttpMethod.GET, "/swagger-ui").permitAll()
+		.antMatchers(HttpMethod.GET, "/swagger-ui/*").permitAll()
+		.antMatchers(HttpMethod.DELETE, "/topicos/*").hasRole("MODERADOR")
 		.anyRequest().authenticated()
 		.and().csrf().disable()
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -58,9 +61,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	// Configurações de recursos estásticos como arquivos css, js , imagens etc..
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-
+	    web.ignoring()
+	        .antMatchers("/**.html", "/v2/api-docs", "/webjars/**", "/configuration/**", "/swagger-resources/**");
 	}
-	
 	
 
 }

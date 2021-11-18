@@ -1,7 +1,4 @@
 package br.com.alura.forum.controllers;
-
-
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;

@@ -34,12 +34,13 @@ public class TokenAuthenticationMiddleware extends OncePerRequestFilter {
 			authenticateUser(token);
 		}
 		
+		
 		filterChain.doFilter(request, response);
 	}
 
 	private void authenticateUser(String token) {
 		Long userID = tokenService.getUserID(token);
-		Usuario user = repository.findById(userID).get();
+		Usuario user = repository.findById(userID).orElseThrow();
 		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}

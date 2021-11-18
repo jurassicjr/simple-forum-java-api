@@ -45,7 +45,8 @@ public class TopicosController {
 
 	@GetMapping
 	@Cacheable(value = "topicList")
-	public Page<TopicoDTO> lista(@RequestParam(required = false) String nomeCurso, @PageableDefault(sort = "id", direction = Direction.DESC) Pageable paginacao) {
+	public Page<TopicoDTO> lista(@RequestParam(required = false) String nomeCurso,
+			@PageableDefault(sort = "id", direction = Direction.DESC) Pageable paginacao) {
 
 		/*
 		 * Pageable paginacao = PageRequest.of(pagina,
